@@ -5,6 +5,7 @@ const { fileTypeController, empresaController, loginController, soloController} 
 
 //Login
 routes.post('/login', loginController.auth);
+routes.post('/password-reset', empresaController.passwordRecovery);
 routes.post('/password-reset', empresaController.passwordReset);
 
 //Private

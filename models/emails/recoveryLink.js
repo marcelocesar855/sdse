@@ -22,9 +22,8 @@ module.exports = {
                                             <tbody>
                                                 <tr>
                                                     <td align="left" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;text-align:left" valign="top"><span><a href="" style="box-sizing:border-box;color:#348eda;font-weight:400;text-decoration:none" target="_blank" >
-                                                        <img alt="Inkneedle"
-                                                        src="https://inkneedle.s3-sa-east-1.amazonaws.com/files/logo_inkneedle.png" style="max-width:100%;border-style:none;height:79px;width:200px" height="79" width="200" class="CToWUd">
-                                                    </a></span></td>
+                                                        
+                                                    <h1 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">SDSE</h1></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -53,7 +52,7 @@ module.exports = {
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="center" bgcolor="#348eda" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;background-color:#348eda;border-radius:2px;text-align:center" valign="top">
-                                                                                                        <a href="${url}" style="box-sizing:border-box;border-color:#348eda;font-weight:400;text-decoration:none;display:inline-block;margin:0;color:#ffffff;background-color:#ff914d;border:solid 1px #ff914d;border-radius:2px;font-size:14px;padding:12px 45px" target="_blank">Redefinir Senha</a>
+                                                                                                        <a href="${url}" style="box-sizing:border-box;border-color:#B0E0E6;font-weight:400;text-decoration:none;display:inline-block;margin:0;color:#ffffff;background-color:#ff914d;border:solid 1px #ff914d;border-radius:2px;font-size:14px;padding:12px 45px" target="_blank">Redefinir Senha</a>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>

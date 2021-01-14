@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const Email = require('../helpers/Email');
 const RecoveryLink = require('./../models/emails/recoveryLink');
-const UserPasswordReset = require('../models/passwordReset')
+const UserPasswordReset = require('../models/passwordReset');
+const empresa = require('../models/empresa');
 
 module.exports = {
     async store(req, res) {
@@ -44,9 +45,9 @@ module.exports = {
         await Empresa.findByPk(req.params.id)
         .then(data => res.json(data))
     },
-    async sendRecoveryLink(user, token) {
-        let html = RecoveryLink.render({ user, token });
-        return await Email.sendEmail(user.email, 'Recuperação de Senha - Inkneedle', html);
+    async sendRecoveryLink(empresa, token) {
+        let html = RecoveryLink.render({ empresa, token });
+        return await Email.sendEmail(empresa.email, 'Redefinição de Senha - SDSE', html);
     },
     generateToken(id) {
         return jwt.sign({ id }, process.env.JWT_SECRET_KEY || '0XwKaeorvZ', {
@@ -60,6 +61,39 @@ module.exports = {
         } catch (err) {
             return false;
         }
+    },
+    async passwordRecovery(req, res) {
+
+        const { email } = req.body; 
+
+        const empresa = await Empresa.findOne({            
+            where: {
+                email
+            }
+        }).catch(error => {
+            return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
+        });
+
+        if (!empresa) {
+            return res.status(400).json({ message: 'E-mail informado não foi encontrado.' });
+        }
+
+        let passwordRecovery = new Password();
+        let token = passwordRecovery.generateToken(empresa.id);        
+
+        const userPasswordReset = await UserPasswordReset.create({
+            email: empresa.email,
+            token
+        }).catch(error => {
+            return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
+        });
+
+        if (userPasswordReset) {
+            await passwordRecovery.sendRecoveryLink(empresa, token);
+            return res.status(200).json({ message: 'Link de redefinição enviado com sucesso.' });
+        }        
+
+        return res.status(400).json({ message: 'Não foi possível enviar link de redefinição, tente novamente mais tarde.' });        
     },
     async passwordReset(req, res) {
 
