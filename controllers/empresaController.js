@@ -1,14 +1,39 @@
 
-const { Empresa } = require('../sequelize');
+const { Empresa, UserPasswordReset } = require('../sequelize');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const Email = require('../helpers/Email');
 const RecoveryLink = require('./../models/emails/recoveryLink');
-const UserPasswordReset = require('../models/passwordReset');
-const empresa = require('../models/empresa');
+
+class Password {
+    async sendRecoveryLink(empresa, token) {
+        let html = RecoveryLink.render({ empresa, token });
+        return await Email.sendEmail(empresa.email, 'Redefinição de Senha - SDSE', html)
+        .catch( err => {
+            console.log(err)
+        })
+    };
+
+
+    generateToken(id) {
+        return jwt.sign({ id }, process.env.JWT_SECRET_KEY || '0XwKaeorvZ', {
+            expiresIn: 86400
+        });
+    }
+
+    async decodedToken(token) {
+        try {
+            const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY || '0XwKaeorvZ');
+            return decoded.id;
+        } catch (err) {
+            return false;
+        }
+    }
+}
 
 module.exports = {
+
     async store(req, res) {
         const validCnpj = await Empresa.findOne({
             where: {
@@ -29,7 +54,8 @@ module.exports = {
     },
     async update(req, res) {
         await Empresa.findByPk(req.params.id)
-        .then(empresa => {
+        .then( async empresa => {
+            req.body.senha = await bcrypt.hash(req.body.senha, 10);
             empresa.update(req.body)
             res.json(empresa)
         })
@@ -44,23 +70,6 @@ module.exports = {
     async indexById (req, res) {
         await Empresa.findByPk(req.params.id)
         .then(data => res.json(data))
-    },
-    async sendRecoveryLink(empresa, token) {
-        let html = RecoveryLink.render({ empresa, token });
-        return await Email.sendEmail(empresa.email, 'Redefinição de Senha - SDSE', html);
-    },
-    generateToken(id) {
-        return jwt.sign({ id }, process.env.JWT_SECRET_KEY || '0XwKaeorvZ', {
-            expiresIn: 86400
-        });
-    },
-    async decodedToken(token) {
-        try {
-            const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY || '0XwKaeorvZ');
-            return decoded.id;
-        } catch (err) {
-            return false;
-        }
     },
     async passwordRecovery(req, res) {
 
@@ -98,8 +107,7 @@ module.exports = {
     async passwordReset(req, res) {
 
         const { token, senha } = req.body;
-
-        let passwordRecovery = new Password()
+        let passwordRecovery = new Password();
         let empresaId = await passwordRecovery.decodedToken(token);
 
         if (!empresaId) {

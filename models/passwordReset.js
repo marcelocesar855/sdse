@@ -1,10 +1,10 @@
 module.exports = (sequelize, type) => {
-    const PasswordReset = sequelize.define('password_reset', {
-        email: DataTypes.STRING(65),
-        token: DataTypes.STRING(191),
+    const UserPasswordReset = sequelize.define('password_reset', {
+        email: type.STRING(65),
+        token: type.STRING(191),
     });
     
-    PasswordReset.removeAttribute('id');
+    UserPasswordReset.removeAttribute('id');
 
-    return PasswordReset;
+    return UserPasswordReset;
 } 

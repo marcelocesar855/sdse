@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, type) => {
     return sequelize.define('file', {   
       id: {
         type: type.INTEGER,
@@ -7,15 +7,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       key: {
         allowNull: false,
-        type: DataTypes.STRING(100)        
+        type: type.STRING(100)        
       },   
       size: {
         allowNull: false,
-        type: DataTypes.BIGINT     
+        type: type.BIGINT     
       },   
       url: {
         allowNull: false,
-        type: DataTypes.STRING(200),
+        type: type.STRING(200),
         set(val) {
           let url = val != '' ? val: `${process.env.APP_URL}/files/${this.key}`;
           this.setDataValue('url', url);       

@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, type) => {
   return sequelize.define('file_type', {
     id: {
       type: type.INTEGER,
@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true
     },
     name: {
-        type: DataTypes.STRING(45),
+        type: type.STRING(45),
         allowNull: false,
     },
     mimeType: {
-      type: DataTypes.STRING(200),
+      type: type.STRING(200),
       allowNull: false,
     },
   })

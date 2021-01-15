@@ -25,11 +25,13 @@ module.exports = {
         })
     },
     async indexByEmpresa (req, res) {
-        const {empresaId} = req.body
         await Solo.findAll({
-            where : {empresaId : empresaId},
+            where : {empresaUserId : req.params.id},
             include : [{
-                model : Empresa
+                model : Empresa,
+                attributes: {
+                    exclude: ['senha']
+                }
             }]
         })
         .then(datas => res.json(datas))
@@ -37,8 +39,12 @@ module.exports = {
     async indexWithData (req, res) {
         await Solo.findAll({
             include : [
-                {model : Empresa},
-                {model : Status}
+                {model : Empresa,
+                    attributes: {
+                        exclude: ['senha']
+                    } },
+                {model : Status},
+                {model : File}
             ]
         })
         .then(datas => res.json(datas))
