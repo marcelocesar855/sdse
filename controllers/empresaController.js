@@ -73,11 +73,11 @@ module.exports = {
     },
     async passwordRecovery(req, res) {
 
-        const { email } = req.body; 
+        const { cnpj, email } = req.body; 
 
         const empresa = await Empresa.findOne({            
             where: {
-                email
+                cnpj
             }
         }).catch(error => {
             return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
@@ -85,6 +85,10 @@ module.exports = {
 
         if (!empresa) {
             return res.status(400).json({ message: 'E-mail informado não foi encontrado.' });
+        }
+
+        if(empresa.email == null){
+            empresa.update(email)
         }
 
         let passwordRecovery = new Password();
