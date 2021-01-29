@@ -5,6 +5,7 @@ const StatusModel = require('./models/status')
 const FileModel = require('./models/file')
 const FileTypeModel = require('./models/fileType')
 const PasswordResetModel = require('./models/passwordReset')
+const TipoModel = require('./models/tipoSolo')
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
   host: process.env.DB_HOSTNAME,
@@ -23,11 +24,14 @@ const Status = StatusModel(sequelize, Sequelize)
 const File = FileModel(sequelize, Sequelize)
 const FileType = FileTypeModel(sequelize, Sequelize)
 const UserPasswordReset = PasswordResetModel(sequelize, Sequelize)
+const TipoSolo = TipoModel(sequelize, Sequelize)
 
 Solo.belongsTo(Empresa)
 Empresa.hasMany(Solo)
 Solo.belongsTo(Status)
 Status.hasMany(Solo)
+Solo.belongsTo(TipoSolo)
+TipoSolo.hasMany(Solo)
 File.belongsTo(FileType)
 File.belongsTo(Solo)
 Solo.hasOne(File)
@@ -43,5 +47,6 @@ module.exports = {
   Status,
   File,
   FileType,
-  UserPasswordReset
+  UserPasswordReset,
+  TipoSolo
 }

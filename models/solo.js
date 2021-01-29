@@ -5,7 +5,10 @@ module.exports = (sequelize, type) => {
           primaryKey: true,
           autoIncrement: true
         },
-        tipo: type.STRING(25),
+        tipo: type.INTEGER,
+        status: type.INTEGER,
         volume: type.DOUBLE,
+        latitude: type.STRING(45),
+        longitude: type.STRING(45)
     })
 } 
