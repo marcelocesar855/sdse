@@ -65,7 +65,7 @@ module.exports = {
         const login = new Login(cnpj, senha); 
                
         if(!await login.checkEmpresa()) {
-            return res.status(400).json({ message: "E-mail ou Senha inválidos" });
+            return res.status(400).json({ message: "CNPJ ou Senha inválidos" });
         }
 
         const data = await login.generateData();
