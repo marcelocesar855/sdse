@@ -10,12 +10,12 @@ routes.post('/login', loginController.auth);
 routes.post('/password-recovery', empresaController.passwordRecovery);
 routes.post('/password-reset', empresaController.passwordReset);
 
-//Private
-routes.use(authMiddleware);
-
 //Empresa
 routes.post('/empresa', empresaController.store)
 routes.get('/empresas', empresaController.index)
+
+//Private
+routes.use(authMiddleware);
 routes.put('/empresa/:id', empresaController.update)
 routes.delete('/empresa/:id', empresaController.destroy)
 routes.get('/empresas-params/:id', empresaController.indexById)
@@ -27,6 +27,7 @@ routes.put('/solo/:id', soloController.update)
 routes.delete('/solo/:id', soloController.destroy)
 routes.get('/solo-params/:id', soloController.indexByEmpresa)
 routes.get('/solos-data', soloController.indexWithData)
+routes.get('/solos-data-params', soloController.indexWithDataByParams)
 
 //File
 routes.get('/files-solo/:id', soloController.indexFilesBySolo);

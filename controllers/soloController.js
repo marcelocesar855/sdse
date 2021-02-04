@@ -49,6 +49,29 @@ module.exports = {
         })
         .then(datas => res.json(datas))
     },
+    async indexWithDataByParams (req, res) {
+        const { volume, tipoId } = req.body;
+        var params = {
+            include : [
+                {model : Empresa,
+                    attributes: {
+                        exclude: ['senha']
+                    } },
+                {model : Status},
+                {model : File}
+            ]
+        }
+        if (volume) {
+            params = {...params, where: {volume : volume}}
+        }
+        if (tipoId) {
+            params = {...params, where: {...params.where,
+                tipoId : tipoId
+            }}
+        }
+        await Solo.findAll(params)
+        .then(datas => res.json(datas))
+    },
     async indexFilesBySolo(req, res) {
         const soloId = req.params.id
         const files = await File.findAll({
@@ -59,7 +82,6 @@ module.exports = {
 
         return res.status(200).json(files);
     },
-
     async storeFile(req, res) {
 
         if (req.file) {
@@ -80,7 +102,6 @@ module.exports = {
             return res.status(400).json({ message: 'Error inesperado, não foi possível salvar arquivo' });
         }  
     },
-
     async destroyFile(req, res) {
         try {
 
