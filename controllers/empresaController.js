@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const Email = require('../helpers/Email');
 const RecoveryLink = require('./../models/emails/recoveryLink');
+const FirstAccessLink = require('../models/emails/firstAccessLink');
 
 class Password {
     async sendRecoveryLink(empresa, token) {
@@ -15,6 +16,13 @@ class Password {
         })
     };
 
+    async sendFirstAccessLink(empresa, token) {
+        let html = FirstAccessLink.render({ empresa, token });
+        return await Email.sendEmail(empresa.email, 'Cadastro de Senha - SDSE', html)
+        .catch( err => {
+            console.log(err)
+        })
+    };
 
     generateToken(id) {
         return jwt.sign({ id }, process.env.JWT_SECRET_KEY || '0XwKaeorvZ', {
@@ -107,6 +115,43 @@ module.exports = {
         }        
 
         return res.status(400).json({ message: 'Não foi possível enviar link de redefinição, tente novamente mais tarde.' });        
+    },
+    async passwordCreation(req, res) {
+
+        const { cnpj, email } = req.body; 
+
+        const empresa = await Empresa.findOne({            
+            where: {
+                cnpj
+            }
+        }).catch(error => {
+            return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
+        });
+
+        if (!empresa) {
+            return res.status(400).json({ message: 'E-mail informado não foi encontrado.' });
+        }
+
+        if(empresa.email == null){
+            empresa.update(email)
+        }
+
+        let passwordRecovery = new Password();
+        let token = passwordRecovery.generateToken(empresa.id);        
+
+        const userPasswordReset = await UserPasswordReset.create({
+            email: empresa.email,
+            token
+        }).catch(error => {
+            return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
+        });
+
+        if (userPasswordReset) {
+            await passwordRecovery.sendFirstAccessLink(empresa, token);
+            return res.status(200).json({ message: 'Link de cadastro de senha enviado com sucesso.' });
+        }        
+
+        return res.status(400).json({ message: 'Não foi possível enviar link de cadastro, tente novamente mais tarde.' });        
     },
     async passwordReset(req, res) {
 

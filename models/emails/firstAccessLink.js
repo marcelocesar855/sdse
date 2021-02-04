@@ -1,6 +1,6 @@
 module.exports = {
     render(data) {
-        let url = `${process.env.APP_FRONDEND_URL}/redef_senha/${data.token}`;
+        let url = `${process.env.APP_FRONDEND_URL}/cadastro_senha/${data.token}`;
 
         return `
             <html>
@@ -37,8 +37,8 @@ module.exports = {
                                                             <tbody>
                                                                 <tr>
                                                                     <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-                                                                        <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Redefinir Senha</h2>
-                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Você está recebendo este e-mail porque recebemos um pedido de redefinição de senha para sua conta.</p>
+                                                                        <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Cadastrar Senha</h2>
+                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Você está recebendo este e-mail porque recebemos um pedido de cadastro de senha para sua conta.</p>
                                                                     </td>
                                                                 </tr>
                                                                 
@@ -52,7 +52,7 @@ module.exports = {
                                                                                             <tbody>
                                                                                                 <tr>
                                                                                                     <td align="center" bgcolor="#348eda" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;background-color:#348eda;border-radius:2px;text-align:center" valign="top">
-                                                                                                        <a href="${url}" style="box-sizing:border-box;border-color:#B0E0E6;font-weight:400;text-decoration:none;display:inline-block;margin:0;color:#ffffff;background-color:#ff914d;border:solid 1px #ff914d;border-radius:2px;font-size:14px;padding:12px 45px" target="_blank">Redefinir Senha</a>
+                                                                                                        <a href="${url}" style="box-sizing:border-box;border-color:#B0E0E6;font-weight:400;text-decoration:none;display:inline-block;margin:0;color:#ffffff;background-color:#ff914d;border:solid 1px #ff914d;border-radius:2px;font-size:14px;padding:12px 45px" target="_blank">Cadastrar Senha</a>
                                                                                                     </td>
                                                                                                 </tr>
                                                                                             </tbody>
@@ -65,7 +65,7 @@ module.exports = {
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:12px;font-weight:300">Se você não solicitou uma reinicialização da senha, nenhuma ação adicional será necessária.</p>
+                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:12px;font-weight:300">Se você não solicitou um link de Primeiro Acesso, nenhuma ação adicional será necessária.</p>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>

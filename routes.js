@@ -9,6 +9,7 @@ const multerConfig = require('./middlewares/multer');
 routes.post('/login', loginController.auth);
 routes.post('/password-recovery', empresaController.passwordRecovery);
 routes.post('/password-reset', empresaController.passwordReset);
+routes.post('/password-firstaccess', empresaController.passwordCreation);
 
 //Private
 routes.use(authMiddleware);
