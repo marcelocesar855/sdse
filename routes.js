@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = express.Router();
 const authMiddleware = require("./middlewares/auth");
-const { fileTypeController, empresaController, loginController, soloController} = require('./controllers');
+const { soloStatusController, soloTipoController, fileTypeController, empresaController, loginController, soloController} = require('./controllers');
 const multer = require('multer');
 const multerConfig = require('./middlewares/multer');
 
@@ -28,7 +28,7 @@ routes.put('/solo/:id', soloController.update)
 routes.delete('/solo/:id', soloController.destroy)
 routes.get('/solo-params/:id', soloController.indexByEmpresa)
 routes.get('/solos-data', soloController.indexWithData)
-routes.get('/solos-data-params', soloController.indexWithDataByParams)
+routes.post('/solos-data-params', soloController.indexWithDataByParams)
 
 //File
 routes.get('/files-solo/:id', soloController.indexFilesBySolo);
@@ -41,5 +41,19 @@ routes.get('/file-types/:id', fileTypeController.show);
 routes.post('/file-types', fileTypeController.store);
 routes.put('/file-types/:id', fileTypeController.update);
 routes.delete('/file-types/:id', fileTypeController.destroy);
+
+// Solo Tipos
+routes.get('/solo-tipos', soloTipoController.index);
+routes.get('/solo-tipos/:id', soloTipoController.show);
+routes.post('/solo-tipos', soloTipoController.store);
+routes.put('/solo-tipos/:id', soloTipoController.update);
+routes.delete('/solo-tipos/:id', soloTipoController.destroy);
+
+// Solo Status
+routes.get('/solo-status', soloStatusController.index);
+routes.get('/solo-status/:id', soloStatusController.show);
+routes.post('/solo-status', soloStatusController.store);
+routes.put('/solo-status/:id', soloStatusController.update);
+routes.delete('/solo-status/:id', soloStatusController.destroy);
 
 module.exports = routes;

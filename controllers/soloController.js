@@ -1,9 +1,17 @@
 
-const { Solo, Empresa, Status, File } = require('../sequelize');
+const { Solo, Empresa, Status, File, TipoSolo } = require('../sequelize');
 
 module.exports = {
     async store(req, res) {
-        await Solo.create(req.body)
+        const {volume, latitude, longitude, statusSoloId, tipoSoloId} = req.body
+        await Solo.create({
+            volume,
+            latitude,
+            longitude,
+            statusSoloId,
+            tipoSoloId,
+            empresaUserId : req.empresaId
+        })
         .then(data => res.json(data))
     },
     async index (req, res) {
@@ -54,11 +62,13 @@ module.exports = {
         var params = {
             include : [
                 {model : Empresa,
+                    where : {id : req.empresaId},
                     attributes: {
                         exclude: ['senha']
-                    } },
+                    }
+                },
                 {model : Status},
-                {model : File}
+                {model : TipoSolo}
             ]
         }
         if (volume) {
@@ -66,7 +76,7 @@ module.exports = {
         }
         if (tipoId) {
             params = {...params, where: {...params.where,
-                tipoId : tipoId
+                tipoSoloId : tipoId
             }}
         }
         await Solo.findAll(params)
