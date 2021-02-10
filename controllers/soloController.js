@@ -57,9 +57,42 @@ module.exports = {
         })
         .then(datas => res.json(datas))
     },
-    async indexWithDataByParams (req, res) {
+    async indexDoacoesWithDataByParams (req, res) {
         const { volume, tipoId } = req.body;
         var params = {
+            where :{
+                statusSolosId : {[Op.or]: [1, 3]}
+                },
+            include : [
+                {model : Empresa,
+                    where : {
+                        id : req.empresaId
+                    },
+                    attributes: {
+                        exclude: ['senha']
+                    }
+                },
+                {model : Status},
+                {model : TipoSolo}
+            ]
+        }
+        if (volume) {
+            params = {...params, where: {volume : volume}}
+        }
+        if (tipoId) {
+            params = {...params, where: {...params.where,
+                tipoSoloId : tipoId
+            }}
+        }
+        await Solo.findAll(params)
+        .then(datas => res.json(datas))
+    },
+    async indexSolicitacoesWithDataByParams (req, res) {
+        const { volume, tipoId } = req.body;
+        var params = {
+            where :{
+                statusSolosId : {[Op.or]: [2, 4]}
+                },
             include : [
                 {model : Empresa,
                     where : {id : req.empresaId},

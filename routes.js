@@ -28,7 +28,8 @@ routes.put('/solo/:id', soloController.update)
 routes.delete('/solo/:id', soloController.destroy)
 routes.get('/solo-params/:id', soloController.indexByEmpresa)
 routes.get('/solos-data', soloController.indexWithData)
-routes.post('/solos-data-params', soloController.indexWithDataByParams)
+routes.post('/solos-doacao-data-params', soloController.indexDoacoesWithDataByParams)
+routes.post('/solos-solicitacao-data-params', soloController.indexSolicitacoesWithDataByParams)
 
 //File
 routes.get('/files-solo/:id', soloController.indexFilesBySolo);
