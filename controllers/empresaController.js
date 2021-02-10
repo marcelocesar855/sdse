@@ -80,9 +80,7 @@ module.exports = {
         .then(data => res.json(data))
     },
     async passwordRecovery(req, res) {
-
         const { cnpj, email } = req.body; 
-
         const empresa = await Empresa.findOne({            
             where: {
                 cnpj
@@ -92,11 +90,15 @@ module.exports = {
         });
 
         if (!empresa) {
-            return res.status(400).json({ message: 'E-mail informado não foi encontrado.' });
+            return res.status(400).json({ message: 'CNPJ informado não foi encontrado.' });
         }
 
-        if(empresa.email == null){
-            empresa.update(email)
+        if(empresa.email == null || empresa.email == ''){
+            await Empresa.findByPk(empresa.id)
+            .then( async empresa => {
+                empresa.update({email})
+            })
+            empresa.email = email;
         }
 
         let passwordRecovery = new Password();
@@ -117,9 +119,7 @@ module.exports = {
         return res.status(400).json({ message: 'Não foi possível enviar link de redefinição, tente novamente mais tarde.' });        
     },
     async passwordCreation(req, res) {
-
         const { cnpj, email } = req.body; 
-
         const empresa = await Empresa.findOne({            
             where: {
                 cnpj
@@ -127,13 +127,15 @@ module.exports = {
         }).catch(error => {
             return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
         });
-
         if (!empresa) {
-            return res.status(400).json({ message: 'E-mail informado não foi encontrado.' });
+            return res.status(400).json({ message: 'CNPJ informado não foi encontrado.' });
         }
-
-        if(empresa.email == null){
-            empresa.update(email)
+        if(empresa.email == null || empresa.email == ''){
+            await Empresa.findByPk(empresa.id)
+            .then( async empresa => {
+                empresa.update({email})
+            })
+            empresa.email = email;
         }
 
         let passwordRecovery = new Password();
