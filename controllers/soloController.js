@@ -93,10 +93,8 @@ module.exports = {
         return res.status(200).json(files);
     },
     async storeFile(req, res) {
-
         if (req.file) {
-            const {size, key, location: url = '', fileTypeId} = req.file;
-
+            const { size, key, location: url = '', fileTypeId } = req.file;
             await File.create({
                 key,
                 size,
