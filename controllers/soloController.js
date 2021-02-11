@@ -1,4 +1,6 @@
 const { Solo, Empresa, TipoSolo, Status, File } = require('../sequelize');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
     async store(req, res) {
@@ -62,7 +64,7 @@ module.exports = {
         const { volume, tipoId } = req.body;
         var params = {
             where :{
-                statusSolosId : {[Op.or]: [1, 3]}
+                statusSoloId : {[Op.or]: [3, 1]}
                 },
             include : [
                 {model : Empresa,
@@ -88,11 +90,39 @@ module.exports = {
         await Solo.findAll(params)
         .then(datas => res.json(datas))
     },
+    async indexDoacoesDisponiveisWithDataByParams (req, res) {
+        const { volume, tipoId } = req.body;
+        var params = {
+            where :{
+                statusSoloId : 1
+                },
+            include : [
+                {model : Empresa,
+                    attributes: {
+                        exclude: ['senha']
+                    }
+                },
+                {model : Status},
+                {model : TipoSolo},
+                {model : File}
+            ]
+        }
+        if (volume) {
+            params = {...params, where: {volume : volume}}
+        }
+        if (tipoId) {
+            params = {...params, where: {...params.where,
+                tipoSoloId : tipoId
+            }}
+        }
+        await Solo.findAll(params)
+        .then(datas => res.json(datas))
+    },
     async indexSolicitacoesWithDataByParams (req, res) {
         const { volume, tipoId } = req.body;
         var params = {
             where :{
-                statusSolosId : {[Op.or]: [2, 4]}
+                statusSoloId : {[Op.or]: [4, 2]}
                 },
             include : [
                 {model : Empresa,
@@ -127,13 +157,15 @@ module.exports = {
         return res.status(200).json(files);
     },
     async storeFile(req, res) {
+        const {soloId} = req.body
         if (req.file) {
             const { size, key, location: url = '', fileTypeId } = req.file;
             await File.create({
                 key,
                 size,
                 url,
-                fileTypeId       
+                fileTypeId,
+                soloId      
             }).then(async (file) => {
                     return res.status(200).json(file);
             }).catch(error => {
