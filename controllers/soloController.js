@@ -1,5 +1,4 @@
-
-const { Solo, Empresa, Status, File, TipoSolo } = require('../sequelize');
+const { Solo, Empresa, TipoSolo, Status, File } = require('../sequelize');
 
 module.exports = {
     async store(req, res) {
@@ -34,13 +33,15 @@ module.exports = {
     },
     async indexByEmpresa (req, res) {
         await Solo.findAll({
-            where : {empresaUserId : req.params.id},
+            where : {empresaUserId : req.empresaId},
             include : [{
                 model : Empresa,
                 attributes: {
                     exclude: ['senha']
                 }
-            }]
+            },
+            {model : Status},
+            {model : TipoSolo},]
         })
         .then(datas => res.json(datas))
     },

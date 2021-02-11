@@ -45,6 +45,9 @@ class Login {
         const empresa = await Empresa.findOne({
             where: {
                 id: this.empresa.id
+            },
+            attributes: {
+                exclude: ['senha']
             }
         });
         const data = {empresa, 
