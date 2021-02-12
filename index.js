@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 const express = require('express')
 const cors = require('cors')
@@ -15,4 +16,7 @@ app.listen(process.env.APP_PORT, () => {
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/files',
+    express.static(path.resolve(__dirname, 'tmp', 'uploads'))
+);
 app.use(routes)

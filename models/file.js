@@ -18,7 +18,7 @@ module.exports = (sequelize, type) => {
         allowNull: false,
         type: type.STRING(200),
         set(val) {
-          let url = val != '' ? val: `${process.env.APP_URL}/tmp/uploads/${this.key}`;
+          let url = val != '' ? val: `${process.env.APP_URL}/files/${this.key}`;
           this.setDataValue('url', url);       
         }        
       },  
