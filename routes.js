@@ -17,7 +17,7 @@ routes.get('/empresas', empresaController.index)
 
 //Private
 routes.use(authMiddleware);
-routes.put('/empresa/:id', empresaController.update)
+routes.put('/empresa', empresaController.update)
 routes.delete('/empresa/:id', empresaController.destroy)
 routes.get('/empresas-params/:id', empresaController.indexById)
 

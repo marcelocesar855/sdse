@@ -61,9 +61,8 @@ module.exports = {
         .then(datas => res.json(datas))
     },
     async update(req, res) {
-        await Empresa.findByPk(req.params.id)
+        await Empresa.findByPk(req.empresaId)
         .then( async empresa => {
-            req.body.senha = await bcrypt.hash(req.body.senha, 10);
             empresa.update(req.body)
             res.json(empresa)
         })
