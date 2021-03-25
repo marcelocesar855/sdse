@@ -6,6 +6,7 @@ module.exports = (sequelize, type) => {
           autoIncrement: true
         },
         volume: type.DOUBLE,
+        cbr: type.DOUBLE,
         latitude: type.STRING(45),
         longitude: type.STRING(45)
     })
