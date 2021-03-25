@@ -1,6 +1,8 @@
 const { Solo, Empresa, TipoSolo, Status, File } = require('../sequelize');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const Email = require('../helpers/Email');
+const interesseSolo = require('./../models/emails/interesseSolo');
 
 module.exports = {
     async store(req, res) {
@@ -14,6 +16,29 @@ module.exports = {
             empresaUserId : req.empresaId
         })
         .then(data => res.json(data))
+    },
+    async manifestoInteresse(req, res) {
+        const {volume, statusSoloId, tipoSoloId, soloId} = req.body
+        const solo = Solo.findAll({
+            where : {id : soloId},
+            include : [{
+                model : Empresa
+            }]
+        })
+        await Solo.create({
+            volume,
+            statusSoloId,
+            tipoSoloId,
+            empresaUserId : req.empresaId
+        })
+        .then(async data => {
+            let html = interesseSolo.render({ doacao : soloId, interesse : data.id});
+            await Email.sendEmail(solo.empresa_user.email, 'Manifestação de interesse em doação - SDSE', html)
+            .catch( err => {
+                console.log(err)
+            })
+            res.json(data)
+        })
     },
     async index (req, res) {
         await Solo.findAll()
@@ -36,6 +61,20 @@ module.exports = {
     async indexByEmpresa (req, res) {
         await Solo.findAll({
             where : {empresaUserId : req.empresaId},
+            include : [{
+                model : Empresa,
+                attributes: {
+                    exclude: ['senha']
+                }
+            },
+            {model : Status},
+            {model : TipoSolo},]
+        })
+        .then(datas => res.json(datas))
+    },
+    async indexById (req, res) {
+        await Solo.findAll({
+            where : {id : req.body.id},
             include : [{
                 model : Empresa,
                 attributes: {
