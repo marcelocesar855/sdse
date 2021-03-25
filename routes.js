@@ -1,7 +1,7 @@
 const express = require('express');
 const routes = express.Router();
 const authMiddleware = require("./middlewares/auth");
-const { soloStatusController, soloTipoController, fileTypeController, empresaController, loginController, soloController} = require('./controllers');
+const { soloStatusController, soloTipoController, fileTypeController, empresaController, loginController, soloController, soloRaController} = require('./controllers');
 const multer = require('multer');
 const multerConfig = require('./middlewares/multer');
 
@@ -58,5 +58,12 @@ routes.get('/solo-status/:id', soloStatusController.show);
 routes.post('/solo-status', soloStatusController.store);
 routes.put('/solo-status/:id', soloStatusController.update);
 routes.delete('/solo-status/:id', soloStatusController.destroy);
+
+// Solo RA
+routes.get('/solo-ras', soloRaController.index);
+routes.get('/solo-ras/:id', soloRaController.show);
+routes.post('/solo-ras', soloRaController.store);
+routes.put('/solo-ras/:id', soloRaController.update);
+routes.delete('/solo-ras/:id', soloRaController.destroy);
 
 module.exports = routes;

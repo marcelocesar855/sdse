@@ -1,4 +1,4 @@
-const { Solo, Empresa, TipoSolo, Status, File } = require('../sequelize');
+const { Solo, Empresa, TipoSolo, Status, File, RA } = require('../sequelize');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const Email = require('../helpers/Email');
@@ -6,13 +6,15 @@ const interesseSolo = require('./../models/emails/interesseSolo');
 
 module.exports = {
     async store(req, res) {
-        const {volume, latitude, longitude, statusSoloId, tipoSoloId} = req.body
+        const {volume, latitude, longitude, statusSoloId, tipoSoloId, raSoloId, cbr} = req.body
         await Solo.create({
             volume,
             latitude,
             longitude,
             statusSoloId,
             tipoSoloId,
+            raSoloId,
+            cbr,
             empresaUserId : req.empresaId
         })
         .then(data => res.json(data))
@@ -68,7 +70,8 @@ module.exports = {
                 }
             },
             {model : Status},
-            {model : TipoSolo},]
+            {model : TipoSolo},
+            {model : RA}]
         })
         .then(datas => res.json(datas))
     },
@@ -94,7 +97,8 @@ module.exports = {
                         exclude: ['senha']
                     } },
                 {model : Status},
-                {model : File}
+                {model : File},
+                {model : RA}
             ]
         })
         .then(datas => res.json(datas))
@@ -115,7 +119,8 @@ module.exports = {
                     }
                 },
                 {model : Status},
-                {model : TipoSolo}
+                {model : TipoSolo},
+                {model : RA}
             ]
         }
         if (volume) {
@@ -143,7 +148,8 @@ module.exports = {
                 },
                 {model : Status},
                 {model : TipoSolo},
-                {model : File}
+                {model : File},
+                {model : RA}
             ]
         }
         if (volume) {
@@ -171,7 +177,8 @@ module.exports = {
                     }
                 },
                 {model : Status},
-                {model : TipoSolo}
+                {model : TipoSolo},
+                {model : RA}
             ]
         }
         if (volume) {

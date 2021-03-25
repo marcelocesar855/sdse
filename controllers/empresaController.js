@@ -3,7 +3,7 @@ const { Empresa, UserPasswordReset } = require('../sequelize');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
-const Email = require('../helpers/Email');
+const Email = require('../helpers/email');
 const RecoveryLink = require('./../models/emails/recoveryLink');
 const FirstAccessLink = require('../models/emails/firstAccessLink');
 
@@ -63,6 +63,7 @@ module.exports = {
     async update(req, res) {
         await Empresa.findByPk(req.empresaId)
         .then( async empresa => {
+            req.body.senha = await bcrypt.hash(req.body.senha, 10);
             empresa.update(req.body)
             res.json(empresa)
         })
