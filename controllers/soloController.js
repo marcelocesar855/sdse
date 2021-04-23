@@ -3,10 +3,13 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const Email = require('../helpers/Email');
 const interesseSolo = require('./../models/emails/interesseSolo');
+const aceiteInteresse = require('./../models/emails/aceiteInteresse');
+const recusaInteresse = require('./../models/emails/recusaInteresse');
+const informeCadastro = require('./../models/emails/informeCadastro');
 
 module.exports = {
     async store(req, res) {
-        const {volume, latitude, longitude, statusSoloId, tipoSoloId, raSoloId, cbr} = req.body
+        const {volume, latitude, longitude, statusSoloId, tipoSoloId, raSoloId, cbr, responsaLaudo} = req.body
         await Solo.create({
             volume,
             latitude,
@@ -15,13 +18,27 @@ module.exports = {
             tipoSoloId,
             raSoloId,
             cbr,
+            responsaLaudo,
             empresaUserId : req.empresaId
         })
-        .then(data => res.json(data))
+        .then(data => {
+            if(statusSoloId == (1 || 2)){
+                const cadastro = await Empresa.findByPk(req.empresaId)
+                const empresas = await Empresa.findAll()
+                empresas.map(empresa => {
+                    let html = informeCadastro.render({ nome : cadastro.nome, tipo : statusSoloId == 1 ? 'Doação' : 'Solicitação'});
+                    await Email.sendEmail(empresa.email, `Novo registro de ${statusSoloId == 1 ? 'Doação' : 'Solicitação'} - SDSE`, html)
+                    .catch( err => {
+                        console.log(err)
+                    })
+                })
+            }
+            res.json(data)
+        })
     },
     async manifestoInteresse(req, res) {
         const {volume, statusSoloId, tipoSoloId, soloId} = req.body
-        const solo = Solo.findAll({
+        const solo = await Solo.findOne({
             where : {id : soloId},
             include : [{
                 model : Empresa
@@ -31,10 +48,11 @@ module.exports = {
             volume,
             statusSoloId,
             tipoSoloId,
+            idInteresse : soloId,
             empresaUserId : req.empresaId
         })
         .then(async data => {
-            let html = interesseSolo.render({ doacao : soloId, interesse : data.id});
+            let html = interesseSolo.render({ interesse : data.id});
             await Email.sendEmail(solo.empresa_user.email, 'Manifestação de interesse em doação - SDSE', html)
             .catch( err => {
                 console.log(err)
@@ -76,8 +94,8 @@ module.exports = {
         .then(datas => res.json(datas))
     },
     async indexById (req, res) {
-        await Solo.findAll({
-            where : {id : req.body.id},
+        await Solo.findOne({
+            where : {id : req.params.id},
             include : [{
                 model : Empresa,
                 attributes: {
@@ -85,9 +103,11 @@ module.exports = {
                 }
             },
             {model : Status},
-            {model : TipoSolo},]
+            {model : TipoSolo}]
         })
-        .then(datas => res.json(datas))
+        .then(datas => {
+            res.json(datas)
+        })
     },
     async indexWithData (req, res) {
         await Solo.findAll({
@@ -235,5 +255,78 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ message: 'Error inesperado, tente novamente mais tarde...' });
         }
+    },
+    async aceitar(req, res) {
+        const {id,volume, idInteresse} = req.body
+        let doacao;
+        let volumeDoacao;
+        await Solo.findOne({
+            where : {id : idInteresse},
+            include : [
+                {model : Empresa},
+                {model : TipoSolo}
+            ]
+        }).then(solo => {
+            doacao = solo;
+            volumeDoacao = solo.volume;
+            var total = solo.volume - volume
+            if(total > 0){
+                solo.update({
+                    volume : total
+                })
+            }else{
+                solo.update({
+                    statusSoloId : 3
+                })
+            }
+        })
+        await Solo.findOne({
+            where : {id},
+            include : [{
+                model : Empresa
+            }]
+        })
+        .then(async data => {
+            doacao.volume = volumeDoacao
+            data.update({
+                statusSoloId : 6
+            })
+            let html = aceiteInteresse.render({ volume : data.volume, doacao});
+            await Email.sendEmail(data.empresa_user.email, 'Aceite de interesse em doação - SDSE', html)
+            .catch( err => {
+                console.log(err)
+            })
+            res.json(data)
+        })
+    },
+    async recusar(req, res) {
+        const {id, idInteresse} = req.body
+        let doacao;
+        await Solo.findOne({
+            where : {id : idInteresse},
+            include : [
+                {model : Empresa},
+                {model : TipoSolo}
+            ]
+        }).then(solo => {
+            doacao = solo;
+        })
+        await Solo.findOne({
+            where : {id},
+            include : [{
+                model : Empresa
+            }]
+        })
+        .then(async data => {
+            data.update({
+                statusSoloId : 7
+            })
+            let html = recusaInteresse.render({ volume : data.volume, doacao});
+            await Email.sendEmail(data.empresa_user.email, 'Recusa de interesse em doação - SDSE', html)
+            .catch( err => {
+                console.log(err)
+            })
+            res.json(data)
+        })
     }
 }

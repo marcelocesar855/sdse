@@ -7,7 +7,9 @@ module.exports = (sequelize, type) => {
         },
         volume: type.DOUBLE,
         cbr: type.DOUBLE,
+        idInteresse: type.INTEGER,
         latitude: type.STRING(45),
-        longitude: type.STRING(45)
+        longitude: type.STRING(45),
+        responsaLaudo: type.BOOLEAN
     })
 } 

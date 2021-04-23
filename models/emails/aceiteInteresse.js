@@ -1,6 +1,5 @@
 module.exports = {
     render(data) {
-        let url = `${process.env.APP_FRONDEND_URL}/interesse_doacao/${data.interesse}`;
 
         return `
             <html>
@@ -37,35 +36,19 @@ module.exports = {
                                                             <tbody>
                                                                 <tr>
                                                                     <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-                                                                        <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Alguém tem interesse em sua doação!</h2>
-                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Você está recebendo este e-mail porque uma doação de solo de escavação sua está sob interesse de uma empresa.</p>
+                                                                        <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">A ${data.doacao.empresa_user.nome} está com o solo disponível!</h2>
+                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Seu interesse de ${data.volume}m³ na doação de ${data.doacao.volume}m³ de solo do tipo ${data.doacao.tipo_solo.tipo} foi aceito.</p>
                                                                     </td>
                                                                 </tr>
                                                                 
                                                                 <tr>
                                                                     <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-                                                                        <table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:100%;border-collapse:separate!important" width="100%">
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td align="center" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding-bottom:15px" valign="top">
-                                                                                        <table cellpadding="0" cellspacing="0" style="box-sizing:border-box;border-spacing:0;width:auto;border-collapse:separate!important">
-                                                                                            <tbody>
-                                                                                                <tr>
-                                                                                                    <td align="center" bgcolor="#348eda" style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;background-color:#348eda;border-radius:2px;text-align:center" valign="top">
-                                                                                                        <a href="${url}" style="box-sizing:border-box;border-color:#B0E0E6;font-weight:400;text-decoration:none;display:inline-block;margin:0;color:#ffffff;background-color:#ff914d;border:solid 1px #ff914d;border-radius:2px;font-size:14px;padding:12px 45px" target="_blank">Verificar manifestação</a>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
+                                                                    <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300">Para proceder com  manejo do solo em acordo com a ${data.doacao.empresa_user.nome}, entre em contato com o representante:<br/><br/>Nome: ${data.doacao.empresa_user.representante}<br/>Telefone: ${data.doacao.empresa_user.telefone}<br/>E-mail: ${data.doacao.empresa_user.email}</p>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
-                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:12px;font-weight:300">Caso você não possua nenhuma doação disponível, atualize os status de seus registros no SDSE!</p>
+                                                                        <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:12px;font-weight:300">Caso já tenha dado procedimento a  movimentação da doação, desconsidere essa mensagem.</p>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>

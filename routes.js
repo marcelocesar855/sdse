@@ -32,6 +32,9 @@ routes.get('/solos-data', soloController.indexWithData)
 routes.post('/solos-doacao-data-params', soloController.indexDoacoesWithDataByParams)
 routes.post('/solos-solicitacao-data-params', soloController.indexSolicitacoesWithDataByParams)
 routes.post('/solos-doacao-disp-data-params', soloController.indexDoacoesDisponiveisWithDataByParams)
+routes.post('/solo-interesse', soloController.manifestoInteresse)
+routes.post('/aceitar', soloController.aceitar)
+routes.post('/recusar', soloController.recusar)
 
 //File
 routes.get('/files-solo/:id', soloController.indexFilesBySolo);
