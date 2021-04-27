@@ -21,11 +21,11 @@ module.exports = {
             responsaLaudo,
             empresaUserId : req.empresaId
         })
-        .then(data => {
-            if(statusSoloId == (1 || 2)){
+        .then(async data => {
+            if(statusSoloId == 1 || statusSoloId == 2){
                 const cadastro = await Empresa.findByPk(req.empresaId)
                 const empresas = await Empresa.findAll()
-                empresas.map(empresa => {
+                empresas.map(async empresa => {
                     let html = informeCadastro.render({ nome : cadastro.nome, tipo : statusSoloId == 1 ? 'Doação' : 'Solicitação'});
                     await Email.sendEmail(empresa.email, `Novo registro de ${statusSoloId == 1 ? 'Doação' : 'Solicitação'} - SDSE`, html)
                     .catch( err => {
