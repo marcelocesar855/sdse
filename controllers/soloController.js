@@ -1,7 +1,7 @@
 const { Solo, Empresa, TipoSolo, Status, File, RA } = require('../sequelize');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const Email = require('../helpers/Email');
+const Email = require('../helpers/email');
 const interesseSolo = require('./../models/emails/interesseSolo');
 const aceiteInteresse = require('./../models/emails/aceiteInteresse');
 const recusaInteresse = require('./../models/emails/recusaInteresse');

@@ -11,12 +11,11 @@ routes.post('/password-recovery', empresaController.passwordRecovery);
 routes.post('/password-reset', empresaController.passwordReset);
 routes.post('/password-firstaccess', empresaController.passwordCreation);
 
+//Private
+routes.use(authMiddleware);
 //Empresa
 routes.post('/empresa', empresaController.store)
 routes.get('/empresas', empresaController.index)
-
-//Private
-routes.use(authMiddleware);
 routes.put('/empresa', empresaController.update)
 routes.delete('/empresa/:id', empresaController.destroy)
 routes.get('/empresas-params/:id', empresaController.indexById)
